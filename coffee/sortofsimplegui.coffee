@@ -18,12 +18,12 @@ window.len = (obj) ->
   obj.length
 
 window.Number.prototype.mod = (n) ->
-  ((this % n) + n) % n
+  ((this%n)+n)%n
 
 window.Array.prototype.remove = (item) ->
   for i in [0...this.length]
     if (this[i] == item)
-      this.splice(i, 1)
+      this.splice(i,1)
       break
 
 window.Array.prototype.difference_update = (t) ->
@@ -48,22 +48,23 @@ class simplegui
 
   #(image, center_source, width_height_source, center_dest, width_height_dest)
   #ontext.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
-  @draw_image = (context, img, source_pos, source_size, dest_pos, dest_size, rotate = 0) ->
+  @draw_image = (context,img,source_pos,source_size,dest_pos,dest_size,rotate=0) ->
+
     context.save()
 
-    hdw = Math.floor(dest_size[0] / 2)
-    hdh = Math.floor(dest_size[1] / 2)
+    hdw = Math.floor(dest_size[0]/2)
+    hdh = Math.floor(dest_size[1]/2)
 
     cpx = dest_pos[0] - hdw
     cpy = dest_pos[1] - hdh
 
-    spx = source_pos[0] - source_size[0] / 2
-    spy = source_pos[1] - source_size[1] / 2
+    spx = source_pos[0] - source_size[0]/2
+    spy = source_pos[1] - source_size[1]/2
 
-    context.translate(cpx, cpy)
+    context.translate(cpx,cpy)
     context.translate(hdw, hdh)
     context.rotate(rotate)
-    context.translate(-cpx, -cpy)
+    context.translate(-cpx,-cpy)
     context.translate(-hdw, -hdh)
     context.drawImage(img,
     spx,
@@ -79,7 +80,7 @@ class simplegui
 
   #canvas.draw_text(text, point, font_size, font_color)
   @draw_text = (context, text, point, font_size, font_color) ->
-    context.font = "normal #{font_size}px Verdana"
+    context.font      = "normal #{font_size}px Verdana"
     context.fillStyle = font_color
     context.fillText(text, point[0], point[1])
 

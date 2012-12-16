@@ -79,7 +79,7 @@ angle_to_vector = (ang) ->
 
 # in coffeescript ** is math.pow
 dist = (p, q) ->
-  Math.sqrt(Math.pow(p[0] - q[0], 2) + Math.pow(p[1] - q[1], 2))
+  Math.sqrt(Math.pow(p[0] - q[0],2) + Math.pow(p[1] - q[1],2))
 
 process_sprite_group = (a_set, canvas)->
   for sprite in a_set
@@ -125,9 +125,9 @@ start = () ->
 
 # Sprite class
 class Sprite
-  constructor: (pos, vel, ang, ang_vel, image, info, sound) ->
-    @pos = [pos[0], pos[1]]
-    @vel = [vel[0], vel[1]]
+  constructor: ( pos, vel, ang, ang_vel, image, info, sound) ->
+    @pos = [pos[0],pos[1]]
+    @vel = [vel[0],vel[1]]
     @angle = ang
     @angle_vel = ang_vel
     @image = image
@@ -152,9 +152,9 @@ class Sprite
 
   draw: (context) ->
     if @animated
-      simplegui.draw_image(context, @image, [@image_center[0] + (@image_size[0] * @age), @image_center[1]], @image_size, @pos, @image_size, @angle)
+      simplegui.draw_image(context, @image, [@image_center[0] + (@image_size[0] * @age), @image_center[1]], @image_size,@pos, @image_size, @angle)
     else
-      simplegui.draw_image(context, @image, @image_center, @image_size, @pos, @image_size, @angle)
+      simplegui.draw_image(context,@image, @image_center, @image_size,@pos, @image_size, @angle)
 
   update: () ->
     # update angle
@@ -240,125 +240,125 @@ class Ship
     @angle_vel = 0
 
 
-    #dirty hack to make keyevents work like simplegui, only matters for left and right
-    keyleft = off
-    keyright = off
+#dirty hack to make keyevents work like simplegui, only matters for left and right
+keyleft = off
+keyright = off
 
-    # key handlers to control ship
-    keydown = (key) ->
-    if key == simplegui.KEY_MAP['left'] and keyleft == off
+# key handlers to control ship
+keydown = (key) ->
+  if key == simplegui.KEY_MAP['left'] and keyleft == off
     my_ship.decrement_angle_vel()
     keyleft = on
-    else if key == simplegui.KEY_MAP['right'] and keyright == off
+  else if key == simplegui.KEY_MAP['right'] and keyright == off
     my_ship.increment_angle_vel()
     keyright = on
-    else if key == simplegui.KEY_MAP['up']
+  else if key == simplegui.KEY_MAP['up']
     my_ship.set_thrust(true)
-    else if key == simplegui.KEY_MAP['space']
+  else if key == simplegui.KEY_MAP['space']
     my_ship.shoot()
 
-    keyup = (key) ->
-    if key == simplegui.KEY_MAP['left'] and keyleft == on
+keyup = (key) ->
+  if key == simplegui.KEY_MAP['left'] and keyleft == on
     console.log "left up"
     my_ship.increment_angle_vel()
     keyleft = off
-    else if key == simplegui.KEY_MAP['right'] and keyright == on
+  else if key == simplegui.KEY_MAP['right'] and keyright == on
     console.log "right up"
     my_ship.decrement_angle_vel()
     keyright = off
-    else if key == simplegui.KEY_MAP['up']
+  else if key == simplegui.KEY_MAP['up']
     my_ship.set_thrust(false)
 
-    # mouseclick handlers that reset UI and conditions whether splash image is drawn
-    click = (pos) ->
-    center = [width / 2, height / 2]
-    size = splash_info.get_size()
-    inwidth = (center[0] - size[0] / 2) < pos[0] < (center[0] + size[0] / 2)
-    inheight = (center[1] - size[1] / 2) < pos[1] < (center[1] + size[1] / 2)
-    if (not started) and inwidth and inheight
+# mouseclick handlers that reset UI and conditions whether splash image is drawn
+click = (pos) ->
+  center = [width / 2, height / 2]
+  size = splash_info.get_size()
+  inwidth = (center[0] - size[0] / 2) < pos[0] < (center[0] + size[0] / 2)
+  inheight = (center[1] - size[1] / 2) < pos[1] < (center[1] + size[1] / 2)
+  if (not started) and inwidth and inheight
     started = true
     start()
 
-    draw = (context) ->
+draw = (context) ->
 
-    lives -= group_collide(rock_group, my_ship)
-    if lives == 0
+  lives -= group_collide(rock_group, my_ship)
+  if lives == 0
     reset()
 
-    score += group_group_collide(missile_group, rock_group)
+  score += group_group_collide(missile_group, rock_group)
 
-    # animiate background
-    time += 1
-    center = debris_info.get_center()
-    size = debris_info.get_size()
-    wtime = (time / 8).mod center[0]
-    simplegui.draw_image(context,nebula_image, nebula_info.get_center(), nebula_info.get_size(), [width/2, height/2], [width, height])
-    simplegui.draw_image(context,debris_image, [center[0]-wtime, center[1]], [size[0]-2*wtime, size[1]],[width/2+1.25*wtime, height/2], [width-2.5*wtime, height])
-    simplegui.draw_image(context,debris_image, [size[0]-wtime, center[1]], [2*wtime, size[1]],[1.25*wtime, height/2], [2.5*wtime, height])
+  # animiate background
+  time += 1
+  center = debris_info.get_center()
+  size = debris_info.get_size()
+  wtime = (time / 8).mod center[0]
+  simplegui.draw_image(context,nebula_image, nebula_info.get_center(), nebula_info.get_size(), [width/2, height/2], [width, height])
+  simplegui.draw_image(context,debris_image, [center[0]-wtime, center[1]], [size[0]-2*wtime, size[1]],[width/2+1.25*wtime, height/2], [width-2.5*wtime, height])
+  simplegui.draw_image(context,debris_image, [size[0]-wtime, center[1]], [2*wtime, size[1]],[1.25*wtime, height/2], [2.5*wtime, height])
 
-    # draw UI
-    simplegui.draw_text(context,"Lives", [50, 50], 22, "White")
-    simplegui.draw_text(context,"Score", [680, 50], 22, "White")
-    simplegui.draw_text(context,str(lives), [50, 80], 22, "White")
-    simplegui.draw_text(context,str(score), [680, 80], 22, "White")
+  # draw UI
+  simplegui.draw_text(context,"Lives", [50, 50], 22, "White")
+  simplegui.draw_text(context,"Score", [680, 50], 22, "White")
+  simplegui.draw_text(context,str(lives), [50, 80], 22, "White")
+  simplegui.draw_text(context,str(score), [680, 80], 22, "White")
 
-    # draw ship and sprites
-    my_ship.draw(context)
-    process_sprite_group(rock_group, context)
-    process_sprite_group(missile_group, context)
-    process_sprite_group(explosion_group, context)
+  # draw ship and sprites
+  my_ship.draw(context)
+  process_sprite_group(rock_group, context)
+  process_sprite_group(missile_group, context)
+  process_sprite_group(explosion_group, context)
 
-    # update ship and sprites
-    my_ship.update()
+  # update ship and sprites
+  my_ship.update()
 
-    # draw splash screen if not started
-    if not started
+  # draw splash screen if not started
+  if not started
     simplegui.draw_image(context,splash_image, splash_info.get_center(),splash_info.get_size(), [width/2, height/2],splash_info.get_size())
 
-    # timer handler that spawns a rock
-    rock_spawner = () ->
-    if started == true
+# timer handler that spawns a rock
+rock_spawner = () ->
+  if started == true
     rock_pos = [random.randrange(0, width), random.randrange(0, height)]
     rock_vel = [random.random() * .6 - .3, random.random() * .6 - .3]
     rock_avel = random.random() * .2 - .1
     a_rock = new Sprite(rock_pos, rock_vel, 0, rock_avel, asteroid_image, asteroid_info)
     if len(rock_group) < 12 and started == true
-    if dist(a_rock.pos, my_ship.get_position()) > 150
-    rock_group.push(a_rock)
+      if dist(a_rock.pos, my_ship.get_position()) > 150
+        rock_group.push(a_rock)
 
-    # initialize stuff
-    #frame = simplegui.create_frame("Asteroids", width, height)
-    canvas = document.getElementById('game_canvas')
-    my_context = canvas.getContext('2d')
+# initialize stuff
+#frame = simplegui.create_frame("Asteroids", width, height)
+canvas = document.getElementById('game_canvas')
+my_context = canvas.getContext('2d')
 
-    # initialize ship and two sprites
-    my_ship = new Ship([width / 2, height / 2], [0, 0], 0, ship_image, ship_info)
-    rock_group = []
-    missile_group = []
-    start()
+# initialize ship and two sprites
+my_ship = new Ship([width / 2, height / 2], [0, 0], 0, ship_image, ship_info)
+rock_group = []
+missile_group = []
+start()
 
-    # register handlers
+# register handlers
 
-    #frame.set_keyup_handler(keyup)
-    document.addEventListener 'keyup', (event) ->
-    console.log event.keyCode
-    keyup(event.keyCode)
+#frame.set_keyup_handler(keyup)
+document.addEventListener 'keyup', (event) ->
+  console.log event.keyCode
+  keyup(event.keyCode)
 
-    #frame.set_keydown_handler(keydown)
-    document.addEventListener 'keydown', (event) ->
-    console.log event.keyCode
-    keydown(event.keyCode)
+#frame.set_keydown_handler(keydown)
+document.addEventListener 'keydown', (event) ->
+  console.log event.keyCode
+  keydown(event.keyCode)
 
-    #frame.set_mouseclick_handler(click)
-    canvas.addEventListener 'click', (event) ->
-    x = event.pageX - canvas.offsetLeft
-    y = event.pageY - canvas.offsetTop
-    click([x,y])
+#frame.set_mouseclick_handler(click)
+canvas.addEventListener 'click', (event) ->
+  x = event.pageX - canvas.offsetLeft
+  y = event.pageY - canvas.offsetTop
+  click([x,y])
 
-    # draw handler
-    timer = setInterval(rock_spawner, 1000)
-    gameloop = () ->
-    canvas.width = canvas.width
-    draw(my_context)
-    webkitRequestAnimationFrame(gameloop)
-    gameloop()
+# draw handler
+timer = setInterval(rock_spawner, 1000)
+gameloop = () ->
+  canvas.width = canvas.width
+  draw(my_context)
+  webkitRequestAnimationFrame(gameloop)
+gameloop()
